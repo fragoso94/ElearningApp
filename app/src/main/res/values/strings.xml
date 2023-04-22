@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ElearningApp</string>
+    <string name="title_login">WelcomeBack</string>
+    <string name="subtitle_login">Login to your existing account of e-learning</string>
+    <string name="input_email_login">Email Address</string>
+    <string name="input_password_login">Create Password</string>
+    <string name="title_forgot_login">Forgot password?</string>
+    <string name="title_button_login">Login</string>
+    <string name="subtitle_button_login">Or connect using</string>
+    <string name="title_footer_login">Don´t have an account?</string>
+    <string name="title_footer_signup_login">Sing Up</string>
 </resources>
