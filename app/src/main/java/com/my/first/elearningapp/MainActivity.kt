@@ -1,15 +1,17 @@
 package com.my.first.elearningapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.my.first.elearningapp.signup.SignUpActivity
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var btnLogin: Button
-    lateinit var editextSignUp: TextView
+    lateinit var etSignUp: TextView
     lateinit var etEmail: EditText
     lateinit var etPassword: EditText
 
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initUI(){
         btnLogin = findViewById(R.id.btn_login)
-        editextSignUp = findViewById(R.id.tv_signup)
+        etSignUp = findViewById(R.id.tv_signup)
         etEmail = findViewById(R.id.et_email)
         etPassword = findViewById(R.id.et_password)
     }
@@ -32,8 +34,9 @@ class MainActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
 
         }
-        editextSignUp.setOnClickListener {
-
+        etSignUp.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
         }
     }
 }
