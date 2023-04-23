@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import com.my.first.elearningapp.bl.services.AutenticationServices
+import com.my.first.elearningapp.home.HomeActivity
 import com.my.first.elearningapp.signup.SignUpActivity
 
 class MainActivity : AppCompatActivity() {
@@ -32,11 +35,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun initListener(){
         btnLogin.setOnClickListener {
-
+            if(etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty())
+            {
+                val services = AutenticationServices()
+                val response = services.iniciarSesion(etEmail.text.toString(), etPassword.text.toString())
+                if (response.exito)
+                {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+                else
+                {
+                    showMessage(response.mensaje)
+                }
+            }
+            else
+            {
+                showMessage("Los campos no pueden estar vacíos.")
+            }
         }
+
         etSignUp.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun showMessage(message: String){
+        val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        toast.show()
     }
 }

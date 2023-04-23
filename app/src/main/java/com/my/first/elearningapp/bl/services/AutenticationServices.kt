@@ -10,6 +10,7 @@ class AutenticationServices : IAutentication {
 
     override fun iniciarSesion(user: String, pass: String): SimpleResponse {
         val response = SimpleResponse()
+        users.add(User("daniel","ing.fragoso94@gmail.com", "9612674521", "123456"))
         // Verificamos si el usuario ya existe
         val usuarioExistente = users.find { it.name == user && it.password == pass }
         if (usuarioExistente != null)
