@@ -9,4 +9,6 @@
     <string name="subtitle_button_login">Or connect using</string>
     <string name="title_footer_login">Don´t have an account?</string>
     <string name="title_footer_signup_login">Sing Up</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
