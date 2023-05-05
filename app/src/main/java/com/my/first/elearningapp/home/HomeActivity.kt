@@ -2,7 +2,14 @@ package com.my.first.elearningapp.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.my.first.elearningapp.fragments.ProfileFragment
 import com.my.first.elearningapp.R
@@ -14,23 +21,35 @@ class HomeActivity : AppCompatActivity() {
     val courseFragment: Fragment = CourseFragment()
     val profileFragment: Fragment = ProfileFragment()
 
-    lateinit var navigation: BottomNavigationView
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
+    lateinit var navHostFragment: NavHostFragment
+    lateinit var bottomNavigationView : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        loadFragment(homeFragment) //lo primero que cargará es el primer fragmento
         initUI()
         initListener()
-        loadFragment(homeFragment) //lo primero que cargará es el primer fragmento
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
     private fun initUI(){
-        navigation = findViewById(R.id.bottom_navigation)
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
     }
 
     private fun initListener(){
-        navigation.setOnNavigationItemSelectedListener { item ->
+        bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeFragment -> {
                     loadFragment(homeFragment)
@@ -44,11 +63,27 @@ class HomeActivity : AppCompatActivity() {
             }
             true
         }
+
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.homeFragment,
+                R.id.courseFragment,
+                R.id.profileFragment
+            )
+        )
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.homeFragment || destination.id == R.id.profileFragment) {
+                supportActionBar?.show()
+            } else {
+                supportActionBar?.hide()
+            }
+        }
     }
 
     private fun loadFragment(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_container, fragment)
+        //transaction.replace(R.id.frame_container, fragment)
+        transaction.replace(R.id.nav_host_fragment, fragment)
         transaction.commit()
     }
 }
