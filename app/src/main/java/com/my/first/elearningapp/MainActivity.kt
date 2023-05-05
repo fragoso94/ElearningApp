@@ -1,15 +1,21 @@
 package com.my.first.elearningapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.room.Room
 import com.my.first.elearningapp.bl.services.AutenticationServices
+import com.my.first.elearningapp.database.ElearningDatabase
+import com.my.first.elearningapp.database.entities.UserEntity
 import com.my.first.elearningapp.home.HomeActivity
 import com.my.first.elearningapp.signup.SignUpActivity
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,12 +24,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var etEmail: EditText
     lateinit var etPassword: EditText
 
+    private lateinit var database: ElearningDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initUI()
         initListener()
+
     }
 
     private fun initUI(){
@@ -34,19 +43,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initListener(){
+        database = Room.databaseBuilder(
+            application, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME)
+            .allowMainThreadQueries()
+            .build()
+        //CoroutineScope(Dispatchers.IO)
+        GlobalScope.launch {
+            saveUsers()
+        }
+
         btnLogin.setOnClickListener {
             if(etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty())
             {
-                val services = AutenticationServices()
-                val response = services.iniciarSesion(etEmail.text.toString(), etPassword.text.toString())
-                if (response.exito)
-                {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                }
-                else
-                {
-                    showMessage(response.mensaje)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val users = getAllUsersRoom()
+                    Log.d("dfragoso94",users.toString())
+                    val response = users.find { it.name == etEmail.text.toString() && it.password == etPassword.text.toString() }
+                    Log.d("dfragoso94",response.toString())
+                    if(response != null) //etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()
+                    {
+                        Navigation("home")
+                        /*val services = AutenticationServices()
+                        val response = services.iniciarSesion(etEmail.text.toString(), etPassword.text.toString())
+                        if (response.exito)
+                        {
+                            Navigation(HomeActivity::class.java)
+                        }
+                        else
+                        {
+                            showMessage(response.mensaje)
+                        }*/
+                    }
+                    else
+                    {
+                        showMessage("No existe datos en la DB.")
+                    }
                 }
             }
             else
@@ -61,8 +92,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun Navigation(route: String) {
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun showMessage(message: String){
-        val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
-        toast.show()
+        runOnUiThread {
+            val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+    }
+
+    private suspend fun getAllUsersRoom() : List<UserEntity>{
+        val users = database.getUserDao().getAllUser()
+        /*if(users.isNotEmpty()){
+            users.forEach{
+                Log.d("dfragoso94","Usuario: ${it.name} con ID: ${it.id}")
+            }
+        }
+        else{
+            Log.d("dfragoso94","No hay datos cargados en la DB")
+        }*/
+        return users
+    }
+
+    private suspend fun saveUsers(){
+        val user1 = UserEntity(name = "Daniel", password = "123456")
+        //val user2 = UserEntity(name = "Ana", password = "12345678")
+        var response = database.getUserDao().getUserId(user1.name.trim())
+        if(response == null)
+        {
+            database.getUserDao().insertAll(user1)
+        }
+        else{
+            Log.d("dfragoso94","El dato ya existe en la DB")
+        }
+        //database.getUserDao().insertAll(user2)
     }
 }
