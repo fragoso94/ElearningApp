@@ -48,9 +48,9 @@ class MainActivity : AppCompatActivity() {
             .allowMainThreadQueries()
             .build()
         //CoroutineScope(Dispatchers.IO)
-        GlobalScope.launch {
+        /*GlobalScope.launch {
             saveUsers()
-        }
+        }*/
 
         btnLogin.setOnClickListener {
             if(etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty())
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("dfragoso94",response.toString())
                     if(response != null) //etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()
                     {
-                        Navigation("home")
+                        navigation("home")
                         /*val services = AutenticationServices()
                         val response = services.iniciarSesion(etEmail.text.toString(), etPassword.text.toString())
                         if (response.exito)
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun Navigation(route: String) {
+    private fun navigation(route: String) {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
     }
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         return users
     }
 
-    private suspend fun saveUsers(){
+    /*private suspend fun saveUsers(){
         val user1 = UserEntity(name = "Daniel", password = "123456")
         //val user2 = UserEntity(name = "Ana", password = "12345678")
         var response = database.getUserDao().getUserId(user1.name.trim())
@@ -129,5 +129,5 @@ class MainActivity : AppCompatActivity() {
             Log.d("dfragoso94","El dato ya existe en la DB")
         }
         //database.getUserDao().insertAll(user2)
-    }
+    }*/
 }
