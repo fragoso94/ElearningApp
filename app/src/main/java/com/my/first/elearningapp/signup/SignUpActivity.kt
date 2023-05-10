@@ -131,10 +131,10 @@ class SignUpActivity : AppCompatActivity() {
         {
             database.getUserDao().insertAll(data)
             Log.d("dfragoso94","El usuario se creo correctamente.")
+            navigationHome()
         }
         else{
             Log.d("dfragoso94","El dato ya existe en la DB")
         }
-        //navigationHome()
     }
 }
