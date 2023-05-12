@@ -85,6 +85,8 @@ class SignUpActivity : AppCompatActivity() {
     private fun navigationHome() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
+
+        finish() // garantiza que la actividad actual se cierre correctamente
     }
 
     private fun validationForm(): SimpleResponse{

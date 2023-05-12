@@ -1,5 +1,7 @@
 package com.my.first.elearningapp.home
 
+import android.content.Intent
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
@@ -11,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.my.first.elearningapp.MainActivity
 import com.my.first.elearningapp.fragments.ProfileFragment
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.fragments.CourseFragment
@@ -40,11 +43,31 @@ class HomeActivity : AppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
+    override fun onBackPressed() {
+        //super.onBackPressed()
+
+        // Aquí puedes agregar la lógica para determinar a qué pantalla deseas regresar
+
+        // Por ejemplo, si deseas regresar a una pantalla llamada "PantallaPrincipalActivity":
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+
+        // Asegúrate de finalizar la actividad actual para que no se pueda volver atrás
+        finish()
+    }
+
     private fun initUI(){
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
+        /*val menu = bottomNavigationView.menu
+        for (i in 0 until menu.size()) {
+            val menuItem = menu.getItem(i)
+            val icon = menuItem.icon as Drawable
+            val iconTintList = resources.getColorStateList(R.color.selector_bottom_navigation_icon_color)
+            icon.setTintList(iconTintList)
+        }*/
     }
 
     private fun initListener(){

@@ -11,4 +11,5 @@
     <color name="orange_normal">#FF5722</color>
     <color name="orange_dark">#EA4612</color>
     <color name="orange_light">#EC6B43</color>
+    <color name="inactive">#8A8A8A</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.my.first.elearningapp.database.dao
 
 import androidx.room.*
+import com.my.first.elearningapp.database.entities.ShoppingEntity
 import com.my.first.elearningapp.database.entities.UserEntity
 
 @Dao
@@ -19,4 +20,10 @@ interface UserDao {
 
     @Delete
     suspend fun delete(user: UserEntity)
+
+    @Query("select idCourse from shopping_table where idUser = :userId")
+    suspend fun getAllShopping(userId: Int): List<Int>
+
+    @Insert
+    suspend fun insertShopping(shopping: ShoppingEntity)
 }
