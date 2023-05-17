@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:text="Home"
+            android:text="Hola mundo"
             android:textSize="25sp" />
     </com.google.android.material.appbar.AppBarLayout>
 
