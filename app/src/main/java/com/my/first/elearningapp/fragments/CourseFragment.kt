@@ -2,59 +2,61 @@ package com.my.first.elearningapp.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.my.first.elearningapp.R
+import com.my.first.elearningapp.adapter.RecyclerAdapter
+import com.my.first.elearningapp.databinding.FragmentCourseBinding
+import com.my.first.elearningapp.model.Course
+import com.my.first.elearningapp.model.CourseClickListener
+import com.my.first.elearningapp.model.listCourses
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CourseFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CourseFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentCourseBinding
+    private var myCoursesList = mutableListOf<Course>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onClick(course: Course)
+    {
+        Toast.makeText(context,"El curso dura ${course.duration} horas", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentCourseBinding.bind(view)
+
+        if(myIdCourses.size > 0) {
+            myCoursesList = myCourses(myIdCourses, listCourses)
+            Toast.makeText(context,"Tienes ${myCoursesList.size} cursos comprados", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(context,"No tienes cursos comprados", Toast.LENGTH_SHORT).show()
+        }
+
+        val myCourseFragment = this
+
+        binding.recycler.apply {
+            layoutManager = LinearLayoutManager(view.context)
+            adapter = RecyclerAdapter(myCoursesList, myCourseFragment)
         }
     }
+}
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course, container, false)
-    }
+private fun myCourses(myIds: List<Int>, courses: List<Course>): MutableList<Course> {
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CourseFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CourseFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    var myCourses = mutableListOf<Course>()
+
+    for(myCourse in myIds){
+
+        for(course in courses){
+
+            if(myCourse == course.id){
+                myCourses.add(course)
+                break
             }
+        }
     }
+    return myCourses
 }
