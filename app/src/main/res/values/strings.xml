@@ -30,4 +30,6 @@
     <string name="buttonWeb">Desarrollo Web</string>
     <string name="buttonAll">Ver todo</string>
     <string name="text_fragment_courses">Categoría</string>
+    <string name="buys">Mis cursos</string>
+    <string name="buttonBuy">Comprar</string>
 </resources>
