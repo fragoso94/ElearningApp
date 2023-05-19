@@ -63,7 +63,8 @@ class SignUpActivity : AppCompatActivity() {
                             name = etName.text.toString(),
                             email = etEmail.text.toString(),
                             mobile = etMobile.text.toString(),
-                            password = etConfirmPassword.text.toString()
+                            password = etConfirmPassword.text.toString(),
+                            status = false
                         )
                         saveUsers(data)
                     }
@@ -83,7 +84,8 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun navigationHome() {
-        val intent = Intent(this, HomeActivity::class.java)
+        //val intent = Intent(this, HomeActivity::class.java) // home
+        val intent = Intent(this, MainActivity::class.java) // Login
         startActivity(intent)
 
         finish() // garantiza que la actividad actual se cierre correctamente

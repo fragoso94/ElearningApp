@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.coroutineScope
 import androidx.room.Room
 import com.my.first.elearningapp.bl.services.AutenticationServices
 import com.my.first.elearningapp.database.ElearningDatabase
@@ -47,22 +48,25 @@ class MainActivity : AppCompatActivity() {
             application, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME)
             .allowMainThreadQueries()
             .build()
-        //CoroutineScope(Dispatchers.IO)
-        /*GlobalScope.launch {
-            saveUsers()
-        }*/
 
         btnLogin.setOnClickListener {
             if(etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty())
             {
                 CoroutineScope(Dispatchers.IO).launch {
                     val users = getAllUsersRoom()
-                    Log.d("dfragoso94",users.toString())
+                    //Log.d("dfragoso94",users.toString())
                     val response = users.find { it.name == etEmail.text.toString() && it.password == etPassword.text.toString() }
                     Log.d("dfragoso94",response.toString())
                     if(response != null) //etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()
                     {
-                        navigation("home")
+//                        setStatusLogin(etEmail.text.trim().toString(), true)
+//                        navigation("home")
+                        lifecycle.coroutineScope.launch(Dispatchers.IO){
+                            val deferred = async { setStatusLogin(response.name, true) }
+                            deferred.await()
+                            navigation("home")
+                        }
+
                         /*val services = AutenticationServices()
                         val response = services.iniciarSesion(etEmail.text.toString(), etPassword.text.toString())
                         if (response.exito)
@@ -89,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         etSignUp.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
+            finish() // garantiza que la actividad actual se cierre correctamente
         }
     }
 
@@ -102,6 +107,10 @@ class MainActivity : AppCompatActivity() {
             val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
             toast.show()
         }
+    }
+
+    private suspend fun setStatusLogin(user: String, status: Boolean) {
+        database.getUserDao().updateStatusUser(user, status)
     }
 
     private suspend fun getAllUsersRoom() : List<UserEntity>{

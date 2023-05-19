@@ -20,5 +20,8 @@ data class UserEntity(
     val mobile: String,
 
     @ColumnInfo(name = "password")
-    val password: String
+    val password: String,
+
+    @ColumnInfo(name = "status")
+    val status: Boolean
 )

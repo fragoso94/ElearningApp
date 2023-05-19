@@ -14,6 +14,7 @@ import com.my.first.elearningapp.model.listCourses
 class DetailFragment : Fragment(R.layout.fragment_detail), CourseClickListener {
 
     private lateinit var binding: FragmentDetailBinding
+    private var myIdCourses = mutableListOf<Int>()
 
     override fun onClick(course: Course)
     {
