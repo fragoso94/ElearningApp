@@ -7,12 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.coroutineScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.adapter.RecyclerAdapter
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
+import com.my.first.elearningapp.database.utilities.SwipeToDeleteCallback
 import com.my.first.elearningapp.databinding.FragmentCourseBinding
 import com.my.first.elearningapp.home.DetailActivity
 import com.my.first.elearningapp.model.COURSE_ID
@@ -51,21 +53,26 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
             if (userResponse != null){
                 //val deferred = async { getCourseShopping(userResponse.id) }
                 myIdCourses = getCourseShopping(userResponse.id) //deferred.await()
-                Log.d("dfragoso94",myIdCourses.toString())
+                //Log.d("dfragoso94",myIdCourses.toString())
 
                 lifecycle.coroutineScope.launch(Dispatchers.Main){
                     if(myIdCourses.isNotEmpty()) {
                         myCoursesList = myCourses(myIdCourses, listCourses)
-                        //Toast.makeText(context,"Tienes ${myCoursesList.size} cursos comprados", Toast.LENGTH_SHORT).show()
-                        Toast.makeText(context,"No Tienes cursos comprados", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Tienes ${myCoursesList.size} cursos comprados", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(context,"No Tienes cursos comprados", Toast.LENGTH_SHORT).show()
                     }
                     else{
                         Toast.makeText(context,"No tienes cursos comprados", Toast.LENGTH_SHORT).show()
                     }
                     binding.recycler.apply {
                         layoutManager = LinearLayoutManager(view.context)
-                        adapter = RecyclerAdapter(myCoursesList, { course -> onItemSelected(course) }) //myCourseFragment
+                        val myAdapter = RecyclerAdapter(myCoursesList, { course -> onItemSelected(course) })
+                        adapter = myAdapter//myCourseFragment
+
+//                        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(myAdapter))
+//                        itemTouchHelper.attachToRecyclerView(binding.recycler)
                     }
+
                 }
 
             }

@@ -39,8 +39,8 @@ class DetailActivity : AppCompatActivity(), CourseClickListener {
         initDatabase(view)
         val courseID = intent.getStringExtra(COURSE_ID)
         val course = courseID?.let { courseFromID(it.toInt()) }
-//        Log.d("dfragoso94","idCurso: $courseID")
-        Log.d("dfragoso94",course.toString())
+        //Log.d("dfragoso94","idCurso: $courseID")
+        //Log.d("dfragoso94",course.toString())
 
         if(course != null) {
             binding.courseImage.setImageResource(course.image)
@@ -60,7 +60,7 @@ class DetailActivity : AppCompatActivity(), CourseClickListener {
                         if(course != null){
                             if(courseIds.isEmpty()){
                                 buyCourse(course.id, user.id)
-                                Toast.makeText(applicationContext,"No hay cursos - Curso comprado - ${course.name}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext,"Tienes ${courseIds.size} cursos comprados", Toast.LENGTH_SHORT).show()
                             }
                             else{
                                 val bought = courseIds.contains(course.id) //Verificamos si el curso se encuentra en nuestra lista de cursos comprados.
