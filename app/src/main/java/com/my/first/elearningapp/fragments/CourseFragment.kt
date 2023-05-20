@@ -1,5 +1,6 @@
 package com.my.first.elearningapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,17 +14,18 @@ import com.my.first.elearningapp.adapter.RecyclerAdapter
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
 import com.my.first.elearningapp.databinding.FragmentCourseBinding
+import com.my.first.elearningapp.home.DetailActivity
+import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.model.listCourses
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
 
     private lateinit var binding: FragmentCourseBinding
-    private var myCoursesList = mutableListOf<Course>()
+    private var myCoursesList = emptyList<Course>() //mutableListOf<Course>()
     private var myIdCourses: List<Int> = emptyList()
 
     private lateinit var database: ElearningDatabase
@@ -60,16 +62,27 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
                     else{
                         Toast.makeText(context,"No tienes cursos comprados", Toast.LENGTH_SHORT).show()
                     }
+                    binding.recycler.apply {
+                        layoutManager = LinearLayoutManager(view.context)
+                        adapter = RecyclerAdapter(myCoursesList, { course -> onItemSelected(course) }) //myCourseFragment
+                    }
                 }
 
             }
         }
 
-        val myCourseFragment = this
+    }
 
-        binding.recycler.apply {
-            layoutManager = LinearLayoutManager(view.context)
-            adapter = RecyclerAdapter(myCoursesList, myCourseFragment)
+    private fun onItemSelected(course: Course){
+        try{
+            Log.d("dfragoso94",course.toString())
+            val activity = requireActivity()
+            val intent = Intent(activity, DetailActivity::class.java)
+            intent.putExtra(COURSE_ID, course.id.toString())
+            activity.startActivity(intent)
+        }
+        catch (e: Exception){
+            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -94,19 +107,10 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
 
 
 
-private fun myCourses(myIds: List<Int>, courses: List<Course>): MutableList<Course> {
-
-    var myCourses = mutableListOf<Course>()
-
-    for(myCourse in myIds){
-
-        for(course in courses){
-
-            if(myCourse == course.id){
-                myCourses.add(course)
-                break
-            }
-        }
+private fun myCourses(myIds: List<Int>, courses: List<Course>): List<Course> {
+    
+    val myCourses = courses.filter { course ->
+        myIds.contains(course.id)
     }
     return myCourses
 }

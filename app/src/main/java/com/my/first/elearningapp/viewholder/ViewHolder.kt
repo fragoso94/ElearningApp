@@ -6,7 +6,7 @@ import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
 
 class ViewHolder(private val cardviewCourseBinding: CardviewCourseBinding,
-                 private val clickListener: CourseClickListener
+                 private val onClickListener:(Course) -> Unit //private val clickListener: CourseClickListener
 )
     : RecyclerView.ViewHolder(cardviewCourseBinding.root){
 
@@ -18,7 +18,8 @@ class ViewHolder(private val cardviewCourseBinding: CardviewCourseBinding,
         cardviewCourseBinding.rbCalification.rating = course.rating
 
         cardviewCourseBinding.cardviewLayout.setOnClickListener{
-            clickListener.onClick(course)
+            //clickListener.onClick(course)
+            onClickListener(course)
         }
     }
 }

@@ -9,14 +9,14 @@ import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.viewholder.ViewHolder
 
 class RecyclerAdapter(private var courses: List<Course>,
-                      private val clickListener: CourseClickListener
+                      private val onClickListener:(Course) -> Unit //private val clickListener: CourseClickListener
 )
     : RecyclerView.Adapter<ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
         val binding = CardviewCourseBinding.inflate(view, parent, false)
-        return ViewHolder(binding, clickListener)
+        return ViewHolder(binding, onClickListener) //clickListener
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
