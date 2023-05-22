@@ -39,6 +39,23 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name=".update.MenuFragment"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".update.ChangepassActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".update.UpdateActivity"
+            android:exported="true">
+        </activity>
+
+
     </application>
 
 </manifest>

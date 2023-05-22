@@ -11,14 +11,14 @@ data class UserEntity(
     @ColumnInfo(name = "id") val id: Int = 0,
 
     @ColumnInfo(name = "name")
-    val name: String,
+    var name: String,
 
     @ColumnInfo(name = "email")
-    val email: String,
+    var email: String,
 
     @ColumnInfo(name = "mobile")
-    val mobile: String,
+    var mobile: String,
 
     @ColumnInfo(name = "password")
-    val password: String
+    var password: String
 )

@@ -1,11 +1,16 @@
 package com.my.first.elearningapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.Toast
 import com.my.first.elearningapp.R
+import com.my.first.elearningapp.update.ChangepassActivity
+import com.my.first.elearningapp.update.UpdateActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,7 +26,8 @@ class ProfileFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var btnIrAActividad: ImageButton
+    private lateinit var btnIrAActividad2: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -36,6 +42,9 @@ class ProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false)
+
+
+
     }
 
     companion object {
@@ -57,4 +66,34 @@ class ProfileFragment : Fragment() {
                 }
             }
     }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        btnIrAActividad = view.findViewById(R.id.imageButton88)
+        btnIrAActividad2 = view.findViewById(R.id.imageButton99)
+
+        btnIrAActividad.setOnClickListener {
+
+            // Acción al hacer clic en el botón
+            val intent = Intent(requireContext(), UpdateActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(requireContext(), "khe", Toast.LENGTH_SHORT).show()
+
+
+        }
+
+        btnIrAActividad2.setOnClickListener {
+            // Acción al hacer clic en el botón
+
+            val intent = Intent(requireContext(), ChangepassActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(requireContext(), "¡Botón pulsado!", Toast.LENGTH_SHORT).show()
+
+
+        }
+}
+
 }

@@ -2,19 +2,19 @@ package com.my.first.elearningapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.room.Room
-import com.my.first.elearningapp.bl.services.AutenticationServices
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
 import com.my.first.elearningapp.home.HomeActivity
 import com.my.first.elearningapp.signup.SignUpActivity
+import com.my.first.elearningapp.update.UserData
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var etSignUp: TextView
     lateinit var etEmail: EditText
     lateinit var etPassword: EditText
-
     private lateinit var database: ElearningDatabase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +53,9 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         btnLogin.setOnClickListener {
+
+
+
             if(etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty())
             {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -62,6 +65,11 @@ class MainActivity : AppCompatActivity() {
                     Log.d("dfragoso94",response.toString())
                     if(response != null) //etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()
                     {
+                        val emailSingle = etEmail.text.toString()
+                        UserData.userEmail = emailSingle
+                        val PasslSingle = etPassword.text.toString()
+                        UserData.userPass = PasslSingle
+
                         navigation("home")
                         /*val services = AutenticationServices()
                         val response = services.iniciarSesion(etEmail.text.toString(), etPassword.text.toString())
@@ -73,6 +81,8 @@ class MainActivity : AppCompatActivity() {
                         {
                             showMessage(response.mensaje)
                         }*/
+
+
                     }
                     else
                     {
@@ -84,9 +94,12 @@ class MainActivity : AppCompatActivity() {
             {
                 showMessage("Los campos no pueden estar vacíos.")
             }
+
+
         }
 
         etSignUp.setOnClickListener {
+
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }

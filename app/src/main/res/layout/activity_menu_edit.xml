@@ -2,13 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="20dp"
     android:foregroundTint="@color/orange_dark"
     android:gravity="center"
-    tools:context=".fragments.ProfileFragment">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/linearLayout5"
@@ -52,13 +51,11 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/imageButton99"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#00FFFFFF"
+            android:id="@+id/imageButton9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="visible"
-            app:srcCompat="@color/transparente"
-            tools:visibility="visible" />
+            app:srcCompat="@android:drawable/bottom_bar" />
 
     </RelativeLayout>
 
@@ -70,7 +67,6 @@
         android:layout_marginTop="80dp"
         android:src="@drawable/authentication"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_account" />
@@ -97,7 +93,8 @@
             android:layout_marginTop="5dp"
             android:foreground="@drawable/rounded_editext"
             android:foregroundTint="@color/material_dynamic_neutral_variant90"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
         </LinearLayout>
 
@@ -119,16 +116,11 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/imageButton88"
-            android:layout_width="match_parent"
-            android:layout_height="73dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="6dp"
-            android:background="#00FFFFFF"
-            android:src="@color/transparente"
+            android:id="@+id/imageButton8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="visible"
-            app:srcCompat="@color/transparente"
-            tools:visibility="visible" />
+            app:srcCompat="@android:drawable/bottom_bar" />
 
     </RelativeLayout>
 
