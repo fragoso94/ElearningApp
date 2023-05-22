@@ -1,60 +1,123 @@
 package com.my.first.elearningapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.coroutineScope
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.my.first.elearningapp.R
+import com.my.first.elearningapp.adapter.RecyclerAdapter
+import com.my.first.elearningapp.database.ElearningDatabase
+import com.my.first.elearningapp.database.entities.UserEntity
+import com.my.first.elearningapp.database.utilities.SwipeToDeleteCallback
+import com.my.first.elearningapp.databinding.FragmentCourseBinding
+import com.my.first.elearningapp.home.DetailActivity
+import com.my.first.elearningapp.model.COURSE_ID
+import com.my.first.elearningapp.model.Course
+import com.my.first.elearningapp.model.CourseClickListener
+import com.my.first.elearningapp.model.listCourses
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CourseFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CourseFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentCourseBinding
+    private var myCoursesList = emptyList<Course>() //mutableListOf<Course>()
+    private var myIdCourses: List<Int> = emptyList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var database: ElearningDatabase
+
+    override fun onClick(course: Course)
+    {
+        Toast.makeText(context,"El curso dura ${course.duration} horas", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentCourseBinding.bind(view)
+
+        //Inicializamos la BD
+        initDatabase(view)
+
+        //Obtenemos en una corutina los cursos comprados
+        lifecycle.coroutineScope.launch(Dispatchers.IO){
+            //val deferredUser = async { getUserLogin() }
+            val userResponse = getUserLogin() //deferredUser.await()
+            userResponse?.toString()?.let { Log.d("dfragoso94", it) }
+
+            if (userResponse != null){
+                //val deferred = async { getCourseShopping(userResponse.id) }
+                myIdCourses = getCourseShopping(userResponse.id) //deferred.await()
+                //Log.d("dfragoso94",myIdCourses.toString())
+
+                lifecycle.coroutineScope.launch(Dispatchers.Main){
+                    if(myIdCourses.isNotEmpty()) {
+                        myCoursesList = myCourses(myIdCourses, listCourses)
+                        Toast.makeText(context,"Tienes ${myCoursesList.size} cursos comprados", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(context,"No Tienes cursos comprados", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        Toast.makeText(context,"No tienes cursos comprados", Toast.LENGTH_SHORT).show()
+                    }
+                    binding.recycler.apply {
+                        layoutManager = LinearLayoutManager(view.context)
+                        val myAdapter = RecyclerAdapter(myCoursesList, { course -> onItemSelected(course) })
+                        adapter = myAdapter//myCourseFragment
+
+//                        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(myAdapter))
+//                        itemTouchHelper.attachToRecyclerView(binding.recycler)
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    private fun onItemSelected(course: Course){
+        try{
+            Log.d("dfragoso94",course.toString())
+            val activity = requireActivity()
+            val intent = Intent(activity, DetailActivity::class.java)
+            intent.putExtra(COURSE_ID, course.id.toString())
+            activity.startActivity(intent)
+        }
+        catch (e: Exception){
+            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course, container, false)
+    private fun initDatabase(view: View){
+        database = Room.databaseBuilder(
+            view.context, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME)
+            .allowMainThreadQueries()
+            .build()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CourseFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CourseFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private suspend fun getUserLogin(): UserEntity? {
+        var response = database.getUserDao().getUserLogin()
+        return response
     }
+
+    private suspend fun getCourseShopping(idUser: Int): List<Int>{
+        var response = database.getUserDao().getAllShopping(idUser)
+        return response
+    }
+
+}
+
+
+
+private fun myCourses(myIds: List<Int>, courses: List<Course>): List<Course> {
+    
+    val myCourses = courses.filter { course ->
+        myIds.contains(course.id)
+    }
+    return myCourses
 }
