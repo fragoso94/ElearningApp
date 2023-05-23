@@ -37,4 +37,6 @@
     <string name="text_fragment_courses">Categoría</string>
     <string name="buys">Mis cursos</string>
     <string name="buttonBuy">Comprar</string>
+    <string name="title_fragment_home">Home</string>
+    <string name="title_fragment_course">My Course</string>
 </resources>
