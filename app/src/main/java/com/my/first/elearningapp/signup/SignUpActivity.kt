@@ -52,6 +52,7 @@ class SignUpActivity : AppCompatActivity() {
         database = Room.databaseBuilder(
             application, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME)
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigrationOnDowngrade()
             .build()
 
         btnSignup.setOnClickListener {

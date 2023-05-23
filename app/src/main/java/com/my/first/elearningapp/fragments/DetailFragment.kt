@@ -92,6 +92,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), CourseClickListener {
         database = Room.databaseBuilder(
             view.context, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME)
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigrationOnDowngrade()
             .build()
     }
 

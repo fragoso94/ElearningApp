@@ -84,6 +84,7 @@ class DetailActivity : AppCompatActivity(), CourseClickListener {
         database = Room.databaseBuilder(
             view.context, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME)
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigrationOnDowngrade()
             .build()
     }
 

@@ -31,11 +31,12 @@ class ChangepassActivity : AppCompatActivity(){
         setContentView(R.layout.activity_change_password)
         etCreatePassword = findViewById(R.id.et_create_password)
         etConfirmPassword = findViewById(R.id.et_confirm_password)
-        btnChangePass = findViewById(R.id.btn_update2)
+        btnChangePass = findViewById(R.id.btn_update3)
 
         database = Room.databaseBuilder(
             applicationContext, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME
-        ).build()
+        )
+            .build()
         btnChangePass.setOnClickListener {
             val password = etCreatePassword.text.toString().trim()
             val passAuth = etConfirmPassword.text.toString().trim()

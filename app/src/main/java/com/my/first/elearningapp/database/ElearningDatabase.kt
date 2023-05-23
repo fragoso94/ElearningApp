@@ -1,5 +1,6 @@
 package com.my.first.elearningapp.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters

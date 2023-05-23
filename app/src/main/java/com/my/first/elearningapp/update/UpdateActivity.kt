@@ -25,21 +25,22 @@ class UpdateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-        btnUpdate =findViewById(R.id.btn_update)
+        btnUpdate =findViewById(R.id.btn_update2)
         etName = findViewById(R.id.et_name_profile)
         etEmail = findViewById(R.id.et_email_address_profile)
         etMobile = findViewById(R.id.et_mobile_profile)
 
         database = Room.databaseBuilder(
             applicationContext, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME
-        ).build()
+        ).allowMainThreadQueries()
+            .build()
 
         GlobalScope.launch(Dispatchers.Main) {
             initData2()
 
         }
 
-        btnUpdate.setOnClickListener {
+       btnUpdate.setOnClickListener {
             val SinglePass = UserData.userPass.toString().trim()
             val name = etName.text.toString().trim()
             val email = etEmail.text.toString().trim()

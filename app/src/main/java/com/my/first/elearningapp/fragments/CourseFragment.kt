@@ -97,6 +97,7 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
         database = Room.databaseBuilder(
             view.context, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME)
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigrationOnDowngrade()
             .build()
     }
 
@@ -115,7 +116,7 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
 
 
 private fun myCourses(myIds: List<Int>, courses: List<Course>): List<Course> {
-    
+
     val myCourses = courses.filter { course ->
         myIds.contains(course.id)
     }

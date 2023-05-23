@@ -9,11 +9,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-<<<<<<< HEAD
-=======
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.coroutineScope
->>>>>>> fd26fee216d5170650a7746427fde69f33aaaa2f
 import androidx.room.Room
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
@@ -51,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         database = Room.databaseBuilder(
             application, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME)
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigrationOnDowngrade()
             .build()
 
         btnLogin.setOnClickListener {
@@ -66,14 +64,14 @@ class MainActivity : AppCompatActivity() {
                     Log.d("dfragoso94",response.toString())
                     if(response != null) //etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()
                     {
-<<<<<<< HEAD
+
                         val emailSingle = etEmail.text.toString()
                         UserData.userEmail = emailSingle
                         val PasslSingle = etPassword.text.toString()
                         UserData.userPass = PasslSingle
 
                         navigation("home")
-=======
+
 //                        setStatusLogin(etEmail.text.trim().toString(), true)
 //                        navigation("home")
                         lifecycle.coroutineScope.launch(Dispatchers.IO){
@@ -82,7 +80,6 @@ class MainActivity : AppCompatActivity() {
                             navigation("home")
                         }
 
->>>>>>> fd26fee216d5170650a7746427fde69f33aaaa2f
                         /*val services = AutenticationServices()
                         val response = services.iniciarSesion(etEmail.text.toString(), etPassword.text.toString())
                         if (response.exito)
