@@ -20,7 +20,7 @@ import com.my.first.elearningapp.database.entities.UserEntity
 import com.my.first.elearningapp.database.utilities.SwipeToDeleteCallback
 import com.my.first.elearningapp.databinding.FragmentCourseBinding
 import com.my.first.elearningapp.home.DetailActivity
-import com.my.first.elearningapp.model.COURSE_ID
+//import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.model.listCourses

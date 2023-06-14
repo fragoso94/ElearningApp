@@ -3,14 +3,14 @@ package com.my.first.elearningapp.model
 import com.my.first.elearningapp.R
 
 // Llave del bundle
-val COURSE_ID = "courseID"
+//val COURSE_ID = "courseID"
 
 data class Course(
-    val id: Int,
-    val image: Int,
-    val category : String,
-    val name:String,
-    val duration: Float,
+    var id: Int,
+    var image: Int,
+    var category : String,
+    var name:String,
+    var duration: Float,
     var price: Float,
     var rating: Float){
 }

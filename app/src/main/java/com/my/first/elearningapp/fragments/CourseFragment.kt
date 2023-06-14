@@ -14,10 +14,11 @@ import com.my.first.elearningapp.R
 import com.my.first.elearningapp.adapter.RecyclerAdapter
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
+import com.my.first.elearningapp.database.utilities.Helpers
 import com.my.first.elearningapp.database.utilities.SwipeToDeleteCallback
 import com.my.first.elearningapp.databinding.FragmentCourseBinding
 import com.my.first.elearningapp.home.DetailActivity
-import com.my.first.elearningapp.model.COURSE_ID
+//import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.model.listCourses
@@ -85,7 +86,7 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
             Log.d("dfragoso94",course.toString())
             val activity = requireActivity()
             val intent = Intent(activity, DetailActivity::class.java)
-            intent.putExtra(COURSE_ID, course.id.toString())
+            intent.putExtra(Helpers.COURSE_ID, course.id.toString())
             activity.startActivity(intent)
         }
         catch (e: Exception){

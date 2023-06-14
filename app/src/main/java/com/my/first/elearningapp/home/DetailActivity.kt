@@ -10,8 +10,9 @@ import androidx.room.Room
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.ShoppingEntity
 import com.my.first.elearningapp.database.entities.UserEntity
+import com.my.first.elearningapp.database.utilities.Helpers
 import com.my.first.elearningapp.databinding.ActivityDetailBinding
-import com.my.first.elearningapp.model.COURSE_ID
+//import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.model.listCourses
@@ -37,7 +38,7 @@ class DetailActivity : AppCompatActivity(), CourseClickListener {
         setContentView(view)
 
         initDatabase(view)
-        val courseID = intent.getStringExtra(COURSE_ID)
+        val courseID = intent.getStringExtra(Helpers.COURSE_ID)
         val course = courseID?.let { courseFromID(it.toInt()) }
         //Log.d("dfragoso94","idCurso: $courseID")
         //Log.d("dfragoso94",course.toString())

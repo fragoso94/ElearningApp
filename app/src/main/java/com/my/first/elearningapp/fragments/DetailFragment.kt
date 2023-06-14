@@ -10,8 +10,9 @@ import com.my.first.elearningapp.R
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.ShoppingEntity
 import com.my.first.elearningapp.database.entities.UserEntity
+import com.my.first.elearningapp.database.utilities.Helpers
 import com.my.first.elearningapp.databinding.FragmentDetailBinding
-import com.my.first.elearningapp.model.COURSE_ID
+//import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.model.listCourses
@@ -38,7 +39,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), CourseClickListener {
         initDatabase(view)
         //var bought = false
 
-        val courseID = arguments?.getInt(COURSE_ID, -1)!!
+        val courseID = arguments?.getInt(Helpers.COURSE_ID, -1)!!
         val course = courseFromID(courseID)
         if(course != null) {
 
