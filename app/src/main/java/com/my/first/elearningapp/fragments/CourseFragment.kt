@@ -12,24 +12,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.adapter.RecyclerAdapter
+import com.my.first.elearningapp.api.Api
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
 import com.my.first.elearningapp.database.utilities.Helpers
 import com.my.first.elearningapp.database.utilities.SwipeToDeleteCallback
 import com.my.first.elearningapp.databinding.FragmentCourseBinding
 import com.my.first.elearningapp.home.DetailActivity
-//import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
-import com.my.first.elearningapp.model.listCourses
+import com.my.first.elearningapp.model.CourseResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
 
     private lateinit var binding: FragmentCourseBinding
     private var myCoursesList = emptyList<Course>() //mutableListOf<Course>()
     private var myIdCourses: List<Int> = emptyList()
+    private var listCourses: List<Course> = listOf()
 
     private lateinit var database: ElearningDatabase
 
@@ -47,33 +50,45 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
 
         //Obtenemos en una corutina los cursos comprados
         lifecycle.coroutineScope.launch(Dispatchers.IO){
-            //val deferredUser = async { getUserLogin() }
             val userResponse = getUserLogin() //deferredUser.await()
             userResponse?.toString()?.let { Log.d("dfragoso94", it) }
 
             if (userResponse != null){
-                //val deferred = async { getCourseShopping(userResponse.id) }
                 myIdCourses = getCourseShopping(userResponse.id) //deferred.await()
-                //Log.d("dfragoso94",myIdCourses.toString())
 
-                lifecycle.coroutineScope.launch(Dispatchers.Main){
-                    if(myIdCourses.isNotEmpty()) {
-                        myCoursesList = myCourses(myIdCourses, listCourses)
-                        Toast.makeText(context,"Tienes ${myCoursesList.size} cursos comprados", Toast.LENGTH_SHORT).show()
-                        //Toast.makeText(context,"No Tienes cursos comprados", Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        Toast.makeText(context,"No tienes cursos comprados", Toast.LENGTH_SHORT).show()
-                    }
-                    binding.recycler.apply {
-                        layoutManager = LinearLayoutManager(view.context)
-                        val myAdapter = RecyclerAdapter(myCoursesList, { course -> onItemSelected(course) })
-                        adapter = myAdapter//myCourseFragment
+                //Obtenemos los cursos de la Api
+                val deferred = async { getCourses(view) }
+                val response = deferred.await()
+                if(response != null)
+                {
+                    listCourses = Helpers.convertListDataClass(view.context, response)
+                    lifecycle.coroutineScope.launch(Dispatchers.Main){
+                        if(myIdCourses.isNotEmpty()) {
+                            myCoursesList = myCourses(myIdCourses, listCourses)
+                            Toast.makeText(context,"Tienes ${myCoursesList.size} cursos comprados", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(context,"No tienes cursos comprados", Toast.LENGTH_SHORT).show()
+                        }
+                        binding.recycler.apply {
+                            layoutManager = LinearLayoutManager(view.context)
+                            val myAdapter = RecyclerAdapter(myCoursesList, { course -> onItemSelected(course) })
+                            adapter = myAdapter//myCourseFragment
 
 //                        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(myAdapter))
 //                        itemTouchHelper.attachToRecyclerView(binding.recycler)
+                        }
                     }
-
+                }
+                else
+                {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            view.context,
+                            "Algo falló en la API.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
 
             }
@@ -83,10 +98,11 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
 
     private fun onItemSelected(course: Course){
         try{
-            Log.d("dfragoso94",course.toString())
             val activity = requireActivity()
             val intent = Intent(activity, DetailActivity::class.java)
-            intent.putExtra(Helpers.COURSE_ID, course.id.toString())
+            //intent.putExtra(Helpers.COURSE_ID, course.id.toString())
+            intent.putExtra(Helpers.COURSE_ITEM, course)
+            intent.putExtra(Helpers.IS_VIEW_BUY, false)
             activity.startActivity(intent)
         }
         catch (e: Exception){
@@ -112,6 +128,28 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
         return response
     }
 
+    private suspend fun getCourses(view: View): List<CourseResponse>?{
+        var response: List<CourseResponse>? = null
+
+        try
+        {
+            var result = Api.courseService.getCourses()
+            response = result.body()
+            //Log.d("dfragoso94", response.toString())
+        }
+        catch (e: Exception)
+        {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(
+                    view.context,
+                    e.message.toString(), //"Error de la API",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            Log.d("dfragoso94", e.message.toString())
+        }
+        return response
+    }
 }
 
 

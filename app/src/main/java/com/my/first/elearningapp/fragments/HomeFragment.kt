@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.adapter.RecyclerAdapter
 import com.my.first.elearningapp.api.Api
@@ -28,6 +29,7 @@ class HomeFragment : Fragment(R.layout.fragment_home ) {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var contexto: Context
     private var listCourses: List<Course> = listOf()
+    private lateinit var shimmerViewContainer: ShimmerFrameLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,10 +48,10 @@ class HomeFragment : Fragment(R.layout.fragment_home ) {
         CoroutineScope(Dispatchers.IO).launch {
             val deferred = async { getCourses() }
             val response = deferred.await()
-            //Log.d("dfragoso94", response.toString())
             if(response != null)
             {
                 withContext(Dispatchers.Main) {
+                    binding.shimmerViewContainer.stopShimmer()
                     Toast.makeText(
                         contexto,
                         "Los cursos se obtuvieron correctamente..",
@@ -57,12 +59,11 @@ class HomeFragment : Fragment(R.layout.fragment_home ) {
                     ).show()
                 }
                 listCourses = Helpers.convertListDataClass(contexto, response)
-                //Log.d("dfragoso94", listCourses.toString())
 
                 CoroutineScope(Dispatchers.Main).launch {
                     //val courseFragment = this
                     var coursesFiltered: List<Course>
-                    Log.d("dfragoso","Comenzando el pintado de datos...")
+
                     binding.recycler.apply {
                         layoutManager = LinearLayoutManager(view.context)
                         adapter = RecyclerAdapter(listCourses, { course -> onItemSelected(course) }) //courseFragment
@@ -86,6 +87,7 @@ class HomeFragment : Fragment(R.layout.fragment_home ) {
                         coursesFiltered = listCourses.filter { c -> c.category.contains("Desarrollo Web") }
                         binding.recycler.adapter = RecyclerAdapter(coursesFiltered, { course -> onItemSelected(course) }) //this
                     }
+                    binding.shimmerViewContainer.visibility = View.INVISIBLE
                 }
 
             }
@@ -108,7 +110,9 @@ class HomeFragment : Fragment(R.layout.fragment_home ) {
             Log.d("dfragoso94",course.toString())
             val activity = contexto //requireActivity()
             val intent = Intent(activity, DetailActivity::class.java)
-            intent.putExtra(Helpers.COURSE_ID, course.id.toString())
+            //intent.putExtra(Helpers.COURSE_ID, course.id.toString())
+            intent.putExtra(Helpers.COURSE_ITEM, course)
+            intent.putExtra(Helpers.IS_VIEW_BUY, true)
             activity.startActivity(intent)
         }
         catch (e: Exception){

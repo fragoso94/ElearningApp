@@ -4,8 +4,8 @@
     <string name="title_signup">Let\'s get started!</string>
     <string name="subtitle_login">Login to your existing account of e-learning</string>
     <string name="subtitle_signup">Create an account to e-learning to get all feactures</string>
-    <string name="input_email_login">Email Address</string>
-    <string name="input_password_login">Create Password</string>
+    <string name="input_email_login">Name User</string>
+    <string name="input_password_login">Password</string>
     <string name="input_name_signup">Name</string>
     <string name="input_email_signup">Email Address</string>
     <string name="input_mobile_signup">Mobile Number</string>

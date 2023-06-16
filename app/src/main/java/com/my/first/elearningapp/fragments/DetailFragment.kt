@@ -15,7 +15,7 @@ import com.my.first.elearningapp.databinding.FragmentDetailBinding
 //import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
-import com.my.first.elearningapp.model.listCourses
+//import com.my.first.elearningapp.model.listCourses
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -37,10 +37,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail), CourseClickListener {
         binding = FragmentDetailBinding.bind(view)
 
         initDatabase(view)
-        //var bought = false
-
-        val courseID = arguments?.getInt(Helpers.COURSE_ID, -1)!!
-        val course = courseFromID(courseID)
+        //val courseID = arguments?.getInt(Helpers.COURSE_ID, -1)!!
+        //val course = courseFromID(courseID)
+        val course: Course? = arguments?.getParcelable(Helpers.COURSE_ITEM)
         if(course != null) {
 
             binding.courseImage.setImageResource(course.image)
@@ -70,21 +69,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail), CourseClickListener {
                     }
                 }
             }
-            /*if(course != null) {
-                for(id in myIdCourses) {
-                    if(id == course.id)
-                        bought = true
-                }
-
-                if(!bought) {
-                    myIdCourses.add(course.id)
-                    Toast.makeText(context,"Haz adquirido el curso de ${course.name}", Toast.LENGTH_SHORT).show()
-                }
-                else {
-                    Toast.makeText(context,"Ya has adquirido este curso", Toast.LENGTH_SHORT).show()
-                }
-
-            }*/
         }
     }
 
@@ -115,13 +99,13 @@ class DetailFragment : Fragment(R.layout.fragment_detail), CourseClickListener {
         return response
     }
 
-    private fun courseFromID(courseID: Int): Course? {
+    /*private fun courseFromID(courseID: Int): Course? {
 
         for(course in listCourses) {
             if(course.id == courseID)
                 return course
         }
         return null
-    }
+    }*/
 
 }

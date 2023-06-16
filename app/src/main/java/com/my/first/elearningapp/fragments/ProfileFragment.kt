@@ -2,32 +2,14 @@ package com.my.first.elearningapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.Toast
-import androidx.lifecycle.coroutineScope
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.my.first.elearningapp.R
-import com.my.first.elearningapp.adapter.RecyclerAdapter
-import com.my.first.elearningapp.database.ElearningDatabase
-import com.my.first.elearningapp.database.entities.UserEntity
-import com.my.first.elearningapp.database.utilities.SwipeToDeleteCallback
-import com.my.first.elearningapp.databinding.FragmentCourseBinding
-import com.my.first.elearningapp.home.DetailActivity
-//import com.my.first.elearningapp.model.COURSE_ID
-import com.my.first.elearningapp.model.Course
-import com.my.first.elearningapp.model.CourseClickListener
-import com.my.first.elearningapp.model.listCourses
 import com.my.first.elearningapp.update.ChangepassActivity
 import com.my.first.elearningapp.update.UpdateActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class ProfileFragment: Fragment(R.layout.fragment_profile) {
 

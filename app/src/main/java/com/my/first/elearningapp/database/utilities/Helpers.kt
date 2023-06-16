@@ -10,6 +10,8 @@ import com.my.first.elearningapp.model.CourseResponse
 class Helpers {
     companion object{
         const val COURSE_ID = "courseID"
+        const val COURSE_ITEM = "courseITEM"
+        const val IS_VIEW_BUY = "courseTYPE"
         const val URL_BASE_API = "http://192.168.1.164:9095/"
 
         fun convertDataClass(context: Context, dataClassA: CourseResponse): Course {

@@ -15,7 +15,7 @@ import com.my.first.elearningapp.databinding.ActivityDetailBinding
 //import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
-import com.my.first.elearningapp.model.listCourses
+//import com.my.first.elearningapp.model.listCourses
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -38,20 +38,18 @@ class DetailActivity : AppCompatActivity(), CourseClickListener {
         setContentView(view)
 
         initDatabase(view)
-        val courseID = intent.getStringExtra(Helpers.COURSE_ID)
-        val course = courseID?.let { courseFromID(it.toInt()) }
-        //Log.d("dfragoso94","idCurso: $courseID")
-        //Log.d("dfragoso94",course.toString())
-
+//        val courseID = intent.getStringExtra(Helpers.COURSE_ID)
+//        val course = courseID?.let { courseFromID(it.toInt()) }
+        val course: Course? = intent.getParcelableExtra(Helpers.COURSE_ITEM)
+        val isViewBuy = intent.getBooleanExtra(Helpers.IS_VIEW_BUY, false)
         if(course != null) {
             binding.courseImage.setImageResource(course.image)
             binding.tvCourse.text = course.name
             binding.tvPrice.text = "$" + String.format("%.2f", course.price)
             binding.tvDuration.text = String.format("%.2f", course.duration) + " horas"
             binding.rbCalification.rating = course.rating
-
         }
-
+        binding.buttonBuy.visibility = if(isViewBuy) View.VISIBLE else View.INVISIBLE
         binding.buttonBuy.setOnClickListener{
             lifecycle.coroutineScope.launch(Dispatchers.IO) {
                 val user = getUserLogin()
@@ -107,14 +105,14 @@ class DetailActivity : AppCompatActivity(), CourseClickListener {
         return response
     }
 
-    private fun courseFromID(courseID: Int): Course? {
-
-        for(course in listCourses) {
-            if(course.id == courseID)
-                return course
-        }
-        return null
-    }
+//    private fun courseFromID(courseID: Int): Course? {
+//
+//        for(course in listCourses) {
+//            if(course.id == courseID)
+//                return course
+//        }
+//        return null
+//    }
 
     override fun onBackPressed() {
         finish()
