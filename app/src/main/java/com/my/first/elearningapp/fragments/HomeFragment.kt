@@ -15,21 +15,28 @@ import com.my.first.elearningapp.api.Api
 import com.my.first.elearningapp.database.utilities.Helpers
 import com.my.first.elearningapp.databinding.FragmentHomeBinding
 import com.my.first.elearningapp.home.DetailActivity
-//import com.my.first.elearningapp.model.COURSE_ID
 import com.my.first.elearningapp.model.Course
-import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.model.CourseResponse
 import kotlinx.coroutines.*
-import retrofit2.HttpException
+import android.transition.Transition
+import android.transition.TransitionInflater
+import android.view.LayoutInflater
+import android.view.ViewGroup
 
-//import com.my.first.elearningapp.model.listCourses
-
-class HomeFragment : Fragment(R.layout.fragment_home ) {
+class HomeFragment : Fragment() { //Fragment(R.layout.fragment_home ) | Fragment()
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var contexto: Context
     private var listCourses: List<Course> = listOf()
     private lateinit var shimmerViewContainer: ShimmerFrameLayout
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,6 +50,19 @@ class HomeFragment : Fragment(R.layout.fragment_home ) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
+
+        // Configura la animación de transición
+        val enterTransitionAnim: Transition = TransitionInflater.from(requireContext())
+            .inflateTransition(android.R.transition.fade)
+        enterTransitionAnim.duration = 1000
+
+        val exitTransitionAnim: Transition = TransitionInflater.from(requireContext())
+            .inflateTransition(android.R.transition.fade)
+        exitTransitionAnim.duration = 1000
+
+        // Establece la transición de entrada y salida en el Fragment
+        enterTransition = enterTransitionAnim
+        exitTransition = exitTransitionAnim
 
         //Obtenemos la lista de cursos de la Api
         CoroutineScope(Dispatchers.IO).launch {
@@ -102,14 +122,17 @@ class HomeFragment : Fragment(R.layout.fragment_home ) {
                 }
             }
         }
-
     }
 
     private fun onItemSelected(course: Course){
         try{
-            Log.d("dfragoso94",course.toString())
+            //Log.d("dfragoso94",course.toString())
             val activity = contexto //requireActivity()
             val intent = Intent(activity, DetailActivity::class.java)
+            requireActivity().overridePendingTransition(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left
+            )
             //intent.putExtra(Helpers.COURSE_ID, course.id.toString())
             intent.putExtra(Helpers.COURSE_ITEM, course)
             intent.putExtra(Helpers.IS_VIEW_BUY, true)

@@ -3,8 +3,10 @@ package com.my.first.elearningapp.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -27,7 +29,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
+class CourseFragment : Fragment(), CourseClickListener { //Fragment(R.layout.fragment_course)
 
     private lateinit var binding: FragmentCourseBinding
     private var myCoursesList = emptyList<Course>() //mutableListOf<Course>()
@@ -39,6 +41,14 @@ class CourseFragment : Fragment(R.layout.fragment_course), CourseClickListener {
     override fun onClick(course: Course)
     {
         Toast.makeText(context,"El curso dura ${course.duration} horas", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_course, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

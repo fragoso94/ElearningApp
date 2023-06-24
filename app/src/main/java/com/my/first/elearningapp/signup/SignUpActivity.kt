@@ -13,7 +13,6 @@ import com.my.first.elearningapp.MainActivity
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
-import com.my.first.elearningapp.home.HomeActivity
 import com.my.first.elearningapp.model.SimpleResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

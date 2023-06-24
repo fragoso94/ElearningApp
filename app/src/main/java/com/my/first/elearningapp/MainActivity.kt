@@ -2,14 +2,14 @@ package com.my.first.elearningapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
+import android.transition.Explode
 import android.util.Log
+import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.coroutineScope
 import androidx.room.Room
 import com.my.first.elearningapp.database.ElearningDatabase
@@ -29,8 +29,16 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Habilita la característica de transiciones antes de la creación de la vista
+        window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Configura la animación de transición
+        val transition = Explode()
+        window.enterTransition = transition
+        window.exitTransition = transition
 
         initUI()
         initListener()
@@ -52,9 +60,6 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         btnLogin.setOnClickListener {
-
-
-
             if(etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty())
             {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -111,6 +116,7 @@ class MainActivity : AppCompatActivity() {
 
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             finish() // garantiza que la actividad actual se cierre correctamente
         }
     }

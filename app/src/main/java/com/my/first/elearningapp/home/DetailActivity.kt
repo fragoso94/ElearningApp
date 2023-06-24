@@ -12,12 +12,12 @@ import com.my.first.elearningapp.database.entities.ShoppingEntity
 import com.my.first.elearningapp.database.entities.UserEntity
 import com.my.first.elearningapp.database.utilities.Helpers
 import com.my.first.elearningapp.databinding.ActivityDetailBinding
-//import com.my.first.elearningapp.model.COURSE_ID
+import android.transition.Explode
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
-//import com.my.first.elearningapp.model.listCourses
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.view.Window
 
 class DetailActivity : AppCompatActivity(), CourseClickListener {
 
@@ -32,10 +32,17 @@ class DetailActivity : AppCompatActivity(), CourseClickListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Habilita la característica de transiciones antes de la creación de la vista
+        window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // Configura la animación de transición
+        val transition = Explode()
+        window.enterTransition = transition
 
         initDatabase(view)
 //        val courseID = intent.getStringExtra(Helpers.COURSE_ID)

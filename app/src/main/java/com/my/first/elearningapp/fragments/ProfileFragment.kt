@@ -2,6 +2,8 @@ package com.my.first.elearningapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Transition
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -39,9 +41,21 @@ class ProfileFragment: Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Configura la animación de transición
+        val enterTransitionAnim: Transition = TransitionInflater.from(requireContext())
+            .inflateTransition(android.R.transition.fade)
+        enterTransitionAnim.duration = 1000
+
+        val exitTransitionAnim: Transition = TransitionInflater.from(requireContext())
+            .inflateTransition(android.R.transition.fade)
+        exitTransitionAnim.duration = 1000
+
+        // Establece la transición de entrada y salida en el Fragment
+        enterTransition = enterTransitionAnim
+        exitTransition = exitTransitionAnim
+
         btnIrAActividad = view.findViewById(R.id.imageButton3)
         btnIrAActividad2 = view.findViewById(R.id.imageButton4)
-
         btnIrAActividad.setOnClickListener {
 
             // Acción al hacer clic en el botón
