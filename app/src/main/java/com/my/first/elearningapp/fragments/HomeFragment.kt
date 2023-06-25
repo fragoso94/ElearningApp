@@ -64,64 +64,76 @@ class HomeFragment : Fragment() { //Fragment(R.layout.fragment_home ) | Fragment
         enterTransition = enterTransitionAnim
         exitTransition = exitTransitionAnim
 
-        //Obtenemos la lista de cursos de la Api
-        CoroutineScope(Dispatchers.IO).launch {
-            val deferred = async { getCourses() }
-            val response = deferred.await()
-            if(response != null)
-            {
-                withContext(Dispatchers.Main) {
-                    binding.shimmerViewContainer.stopShimmer()
-                    Toast.makeText(
-                        contexto,
-                        "Los cursos se obtuvieron correctamente..",
-                        Toast.LENGTH_SHORT
-                    ).show()
+        if(Helpers.isInternetAvailable(contexto)){
+            //Obtenemos la lista de cursos de la Api
+            CoroutineScope(Dispatchers.IO).launch {
+                val deferred = async { getCourses() }
+                val response = deferred.await()
+                if(response != null)
+                {
+                    withContext(Dispatchers.Main) {
+                        binding.shimmerViewContainer.stopShimmer()
+                        Toast.makeText(
+                            contexto,
+                            "Los cursos se obtuvieron correctamente..",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    listCourses = Helpers.convertListDataClass(contexto, response)
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        //val courseFragment = this
+                        var coursesFiltered: List<Course>
+
+                        binding.recycler.apply {
+                            layoutManager = LinearLayoutManager(view.context)
+                            adapter = RecyclerAdapter(listCourses, { course -> onItemSelected(course) }) //courseFragment
+                        }
+
+                        binding.buttonAll.setOnClickListener{
+                            binding.recycler.adapter = RecyclerAdapter(listCourses, { course -> onItemSelected(course) }) //this
+                        }
+
+                        binding.buttonDesign.setOnClickListener{
+                            coursesFiltered = listCourses.filter { c -> c.category.contains("Diseño") }
+                            binding.recycler.adapter = RecyclerAdapter(coursesFiltered, { course -> onItemSelected(course) }) //this
+                        }
+
+                        binding.buttonProgrammation.setOnClickListener {
+                            coursesFiltered = listCourses.filter { c -> c.category.contains("Programación") }
+                            binding.recycler.adapter = RecyclerAdapter(coursesFiltered, { course -> onItemSelected(course) }) //this
+                        }
+
+                        binding.buttonWeb.setOnClickListener {
+                            coursesFiltered = listCourses.filter { c -> c.category.contains("Desarrollo Web") }
+                            binding.recycler.adapter = RecyclerAdapter(coursesFiltered, { course -> onItemSelected(course) }) //this
+                        }
+                        binding.shimmerViewContainer.visibility = View.INVISIBLE
+                    }
                 }
-                listCourses = Helpers.convertListDataClass(contexto, response)
-
-                CoroutineScope(Dispatchers.Main).launch {
-                    //val courseFragment = this
-                    var coursesFiltered: List<Course>
-
-                    binding.recycler.apply {
-                        layoutManager = LinearLayoutManager(view.context)
-                        adapter = RecyclerAdapter(listCourses, { course -> onItemSelected(course) }) //courseFragment
+                else
+                {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            contexto,
+                            "Algo falló en la API.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-
-                    binding.buttonAll.setOnClickListener{
-                        binding.recycler.adapter = RecyclerAdapter(listCourses, { course -> onItemSelected(course) }) //this
-                    }
-
-                    binding.buttonDesign.setOnClickListener{
-                        coursesFiltered = listCourses.filter { c -> c.category.contains("Diseño") }
-                        binding.recycler.adapter = RecyclerAdapter(coursesFiltered, { course -> onItemSelected(course) }) //this
-                    }
-
-                    binding.buttonProgrammation.setOnClickListener {
-                        coursesFiltered = listCourses.filter { c -> c.category.contains("Programación") }
-                        binding.recycler.adapter = RecyclerAdapter(coursesFiltered, { course -> onItemSelected(course) }) //this
-                    }
-
-                    binding.buttonWeb.setOnClickListener {
-                        coursesFiltered = listCourses.filter { c -> c.category.contains("Desarrollo Web") }
-                        binding.recycler.adapter = RecyclerAdapter(coursesFiltered, { course -> onItemSelected(course) }) //this
-                    }
-                    binding.shimmerViewContainer.visibility = View.INVISIBLE
-                }
-
-            }
-            else
-            {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        contexto,
-                        "Algo falló en la API.",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         }
+        else
+        {
+            CoroutineScope(Dispatchers.Main).launch {
+                Toast.makeText(
+                    contexto,
+                    "No hay conexión a internet.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     }
 
     private fun onItemSelected(course: Course){
