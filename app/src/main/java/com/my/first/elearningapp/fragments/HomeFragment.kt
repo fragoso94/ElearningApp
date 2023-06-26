@@ -20,7 +20,7 @@ import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.model.CourseResponse
 import kotlinx.coroutines.*
-import retrofit2.HttpException
+ import retrofit2.HttpException
 
 //import com.my.first.elearningapp.model.listCourses
 
