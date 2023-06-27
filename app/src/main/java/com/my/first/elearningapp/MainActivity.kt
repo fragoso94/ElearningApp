@@ -10,11 +10,14 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.coroutineScope
 import androidx.room.Room
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
 import com.my.first.elearningapp.home.HomeActivity
+import com.my.first.elearningapp.notification.executeOrRequestPermission
+import com.my.first.elearningapp.notification.simpleNotification
 import com.my.first.elearningapp.signup.SignUpActivity
 import com.my.first.elearningapp.update.UserData
 import kotlinx.coroutines.*
@@ -66,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                     val users = getAllUsersRoom()
                     //Log.d("dfragoso94",users.toString())
                     val response = users.find { it.name == etEmail.text.toString() && it.password == etPassword.text.toString() }
-                    Log.d("dfragoso94",response.toString())
+                    //Log.d("dfragoso94",response.toString())
                     if(response != null) //etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()
                     {
 
@@ -100,7 +103,10 @@ class MainActivity : AppCompatActivity() {
                     }
                     else
                     {
-                        showMessage("No existe datos en la DB.")
+                        //showMessage("No existe datos en la DB.")
+                        executeOrRequestPermission(this@MainActivity) {
+                            simpleNotification(this@MainActivity)
+                        }
                     }
                 }
             }
@@ -113,11 +119,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         etSignUp.setOnClickListener {
-
-            val intent = Intent(this, SignUpActivity::class.java)
+            executeOrRequestPermission(this@MainActivity) {
+                simpleNotification(this@MainActivity)
+            }
+            /*val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            finish() // garantiza que la actividad actual se cierre correctamente
+            finish() // garantiza que la actividad actual se cierre correctamente*/
         }
     }
 
@@ -149,18 +157,4 @@ class MainActivity : AppCompatActivity() {
         }*/
         return users
     }
-
-    /*private suspend fun saveUsers(){
-        val user1 = UserEntity(name = "Daniel", password = "123456")
-        //val user2 = UserEntity(name = "Ana", password = "12345678")
-        var response = database.getUserDao().getUserId(user1.name.trim())
-        if(response == null)
-        {
-            database.getUserDao().insertAll(user1)
-        }
-        else{
-            Log.d("dfragoso94","El dato ya existe en la DB")
-        }
-        //database.getUserDao().insertAll(user2)
-    }*/
 }
