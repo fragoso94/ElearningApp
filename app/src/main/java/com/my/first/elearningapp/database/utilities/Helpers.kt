@@ -2,6 +2,9 @@ package com.my.first.elearningapp.database.utilities
 
 import android.content.Context
 import android.content.res.Resources
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseResponse
 import okhttp3.OkHttpClient
@@ -18,6 +21,9 @@ class Helpers {
         const val COURSE_ITEM = "courseITEM"
         const val IS_VIEW_BUY = "courseTYPE"
         const val URL_BASE_API = "https://apicursosbedu.servicesnet.site/" //"http://192.168.1.164:9095/"
+        // Código para los permisos de la camará
+        const val PERMISSION_CODE = 1000
+        const val IMAGE_CAPTURE_CODE = 1001
 
         fun convertDataClass(context: Context, dataClassA: CourseResponse): Course {
             val resources: Resources = context.resources
@@ -79,5 +85,18 @@ class Helpers {
             }
         }
 
+        fun isInternetAvailable(context: Context): Boolean {
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val network = connectivityManager.activeNetwork ?: return false
+                val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+                return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                        networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            } else {
+                val networkInfo = connectivityManager.activeNetworkInfo
+                return networkInfo != null && networkInfo.isConnectedOrConnecting
+            }
+        }
     }
 }

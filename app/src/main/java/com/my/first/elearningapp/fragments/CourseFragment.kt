@@ -24,10 +24,7 @@ import com.my.first.elearningapp.home.DetailActivity
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
 import com.my.first.elearningapp.model.CourseResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class CourseFragment : Fragment(), CourseClickListener { //Fragment(R.layout.fragment_course)
 
@@ -58,49 +55,61 @@ class CourseFragment : Fragment(), CourseClickListener { //Fragment(R.layout.fra
         //Inicializamos la BD
         initDatabase(view)
 
-        //Obtenemos en una corutina los cursos comprados
-        lifecycle.coroutineScope.launch(Dispatchers.IO){
-            val userResponse = getUserLogin() //deferredUser.await()
-            userResponse?.toString()?.let { Log.d("dfragoso94", it) }
+        if(Helpers.isInternetAvailable(view.context)){
+            //Obtenemos en una corutina los cursos comprados
+            lifecycle.coroutineScope.launch(Dispatchers.IO){
+                val userResponse = getUserLogin() //deferredUser.await()
+                userResponse?.toString()?.let { Log.d("dfragoso94", it) }
 
-            if (userResponse != null){
-                myIdCourses = getCourseShopping(userResponse.id) //deferred.await()
+                if (userResponse != null){
+                    myIdCourses = getCourseShopping(userResponse.id) //deferred.await()
 
-                //Obtenemos los cursos de la Api
-                val deferred = async { getCourses(view) }
-                val response = deferred.await()
-                if(response != null)
-                {
-                    listCourses = Helpers.convertListDataClass(view.context, response)
-                    lifecycle.coroutineScope.launch(Dispatchers.Main){
-                        if(myIdCourses.isNotEmpty()) {
-                            myCoursesList = myCourses(myIdCourses, listCourses)
-                            Toast.makeText(context,"Tienes ${myCoursesList.size} cursos comprados", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
-                            Toast.makeText(context,"No tienes cursos comprados", Toast.LENGTH_SHORT).show()
-                        }
-                        binding.recycler.apply {
-                            layoutManager = LinearLayoutManager(view.context)
-                            val myAdapter = RecyclerAdapter(myCoursesList, { course -> onItemSelected(course) })
-                            adapter = myAdapter//myCourseFragment
+                    //Obtenemos los cursos de la Api
+                    val deferred = async { getCourses(view) }
+                    val response = deferred.await()
+                    if(response != null)
+                    {
+                        listCourses = Helpers.convertListDataClass(view.context, response)
+                        lifecycle.coroutineScope.launch(Dispatchers.Main){
+                            if(myIdCourses.isNotEmpty()) {
+                                myCoursesList = myCourses(myIdCourses, listCourses)
+                                Toast.makeText(context,"Tienes ${myCoursesList.size} cursos comprados", Toast.LENGTH_SHORT).show()
+                            }
+                            else{
+                                Toast.makeText(context,"No tienes cursos comprados", Toast.LENGTH_SHORT).show()
+                            }
+                            binding.recycler.apply {
+                                layoutManager = LinearLayoutManager(view.context)
+                                val myAdapter = RecyclerAdapter(myCoursesList, { course -> onItemSelected(course) })
+                                adapter = myAdapter//myCourseFragment
 
 //                        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(myAdapter))
 //                        itemTouchHelper.attachToRecyclerView(binding.recycler)
+                            }
                         }
                     }
-                }
-                else
-                {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            view.context,
-                            "Algo falló en la API.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    else
+                    {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                view.context,
+                                "Algo falló en la API.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
 
+                }
+            }
+        }
+        else
+        {
+            CoroutineScope(Dispatchers.Main).launch {
+                Toast.makeText(
+                    view.context,
+                    "No hay conexión a internet.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 

@@ -5,28 +5,25 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.coroutineScope
 import androidx.room.Room
 import com.google.android.material.button.MaterialButton
-import com.my.first.elearningapp.MainActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.database.ElearningDatabase
-import com.my.first.elearningapp.database.entities.UserEntity
-import com.my.first.elearningapp.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class UpdateActivity : AppCompatActivity() {
-    private lateinit var btn_update_photo: MaterialButton
+    //private lateinit var btn_update_photo: MaterialButton
+    private lateinit var addPhotoButton : FloatingActionButton
     private lateinit var btnUpdate: MaterialButton
+    private lateinit var imageViewUser: ImageView
     private lateinit var database: ElearningDatabase
     private lateinit var etName: EditText
     private lateinit var etEmail: EditText
@@ -62,37 +59,24 @@ class UpdateActivity : AppCompatActivity() {
                 }
             }
 
-            btn_update_photo.setOnClickListener{
+            addPhotoButton.setOnClickListener{
                 startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
             }
 
-
         }
+    }
 
-
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        result: ActivityResult ->
+        if(result.resultCode == Activity.RESULT_OK)
+        {
+            val intent = result.data
+            // Se obtiene imagen de la camara y se almacena en imageBitmap
+            val imageBitmap = intent?.extras?.get("data") as Bitmap
+            // se cambia la propiedad de la imagen a la obtenida en la foto
+            imageViewUser.setImageBitmap(imageBitmap)
         }
-
-private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-    result: ActivityResult ->
-    if(result.resultCode == Activity.RESULT_OK)
-    {
-        val intent = result.data
-        // Se obtiene imagen de la camara y se almacena en imageBitmap
-        val imageBitmap = intent?.extras?.get("data") as Bitmap
-        val imageView = findViewById<ImageView>(R.id.imageView_profile)
-       // val imageView2 = findViewById<ImageView>(R.id.imageView_profile2)
-        // se cambia la propiedad de la imagen a la obtenida en la foto
-        imageView.setImageBitmap(imageBitmap)
-     // imageView2.setImageBitmap(imageBitmap)
-}
-
-}
-
-
-
-
-
-
+    }
 
 
     private fun initUI(){
@@ -105,10 +89,9 @@ private val startForResult = registerForActivityResult(ActivityResultContracts.S
         etName = findViewById(R.id.et_name_profile)
         etEmail = findViewById(R.id.et_email_address_profile)
         etMobile = findViewById(R.id.et_mobile_profile)
-        btn_update_photo = findViewById(R.id.btn_update_photo)
+        addPhotoButton = findViewById(R.id.addPhotoFab)
+        imageViewUser = findViewById(R.id.imageView_profile)
     }
-
-
 
     private suspend fun initData2() {
         try{
