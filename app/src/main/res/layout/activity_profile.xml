@@ -88,16 +88,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_mobile_profile" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_update_photo"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addPhotoFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Change profile photo
-"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/orange_normal"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_baseline_photo_camera"
+        app:backgroundTint="@color/orange_normal"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.653"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_mobile_profile" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.805"
+        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

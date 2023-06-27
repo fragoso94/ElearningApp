@@ -133,6 +133,7 @@
         android:layout_marginBottom="50dp"
         android:background="@color/orange_normal"
         android:contentDescription="@string/app_name"
+        android:visibility="gone"
         android:src="@drawable/ic_baseline_photo_camera"
         app:backgroundTint="@color/orange_normal"
         app:tint="@color/white" />
