@@ -7,14 +7,22 @@ import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.coroutineScope
 import androidx.room.Room
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
+import com.my.first.elearningapp.database.utilities.Helpers
 import com.my.first.elearningapp.home.HomeActivity
+import com.my.first.elearningapp.notification.executeOrRequestPermission
+import com.my.first.elearningapp.notification.simpleNotification
 import com.my.first.elearningapp.signup.SignUpActivity
 import com.my.first.elearningapp.update.UserData
 import kotlinx.coroutines.*
@@ -25,8 +33,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var etSignUp: TextView
     lateinit var etEmail: EditText
     lateinit var etPassword: EditText
-    private lateinit var database: ElearningDatabase
+    lateinit var btnGoogle: ImageButton
 
+    private lateinit var database: ElearningDatabase
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Habilita la característica de transiciones antes de la creación de la vista
@@ -34,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        auth = Firebase.auth //indicamos vamos a utilizar los método de autencación en este activity
         // Configura la animación de transición
         val transition = Explode()
         window.enterTransition = transition
@@ -50,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         etSignUp = findViewById(R.id.tv_signup)
         etEmail = findViewById(R.id.et_email)
         etPassword = findViewById(R.id.et_password)
+        btnGoogle = findViewById(R.id.imagebtn_google)
     }
 
     private fun initListener(){
@@ -62,45 +73,37 @@ class MainActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
             if(etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty())
             {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val users = getAllUsersRoom()
-                    //Log.d("dfragoso94",users.toString())
-                    val response = users.find { it.name == etEmail.text.toString() && it.password == etPassword.text.toString() }
-                    Log.d("dfragoso94",response.toString())
-                    if(response != null) //etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()
-                    {
-
-                        val emailSingle = etEmail.text.toString()
-                        UserData.userEmail = emailSingle
-                        val PasslSingle = etPassword.text.toString()
-                        UserData.userPass = PasslSingle
-
-                        navigation("home")
-
-//                        setStatusLogin(etEmail.text.trim().toString(), true)
-//                        navigation("home")
-                        lifecycle.coroutineScope.launch(Dispatchers.IO){
-                            val deferred = async { setStatusLogin(response.name, true) }
-                            deferred.await()
-                            navigation("home")
-                        }
-
-                        /*val services = AutenticationServices()
-                        val response = services.iniciarSesion(etEmail.text.toString(), etPassword.text.toString())
-                        if (response.exito)
+                if(Helpers.isInternetAvailable(this))
+                {
+                    signInFirebase(etEmail.text.toString(), etPassword.text.toString())
+                }
+                else //Si no hay internet iniciamos sesión de manera offline
+                {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val users = getAllUsersRoom()
+                        val response = users.find { it.name == etEmail.text.toString() && it.password == etPassword.text.toString() }
+                        if(response != null) //etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()
                         {
-                            Navigation(HomeActivity::class.java)
+                            val emailSingle = etEmail.text.toString()
+                            UserData.userEmail = emailSingle
+                            val PasslSingle = etPassword.text.toString()
+                            UserData.userPass = PasslSingle
+
+                            //navigation("home")
+
+                            lifecycle.coroutineScope.launch(Dispatchers.IO){
+                                val deferred = async { setStatusLogin(response.name, true) }
+                                deferred.await()
+                                navigation("home")
+                            }
                         }
                         else
                         {
-                            showMessage(response.mensaje)
-                        }*/
-
-
-                    }
-                    else
-                    {
-                        showMessage("No existe datos en la DB.")
+                            //showMessage("No existe datos en la DB.")
+                            executeOrRequestPermission(this@MainActivity) {
+                                simpleNotification(this@MainActivity)
+                            }
+                        }
                     }
                 }
             }
@@ -108,16 +111,17 @@ class MainActivity : AppCompatActivity() {
             {
                 showMessage("Los campos no pueden estar vacíos.")
             }
-
-
         }
 
         etSignUp.setOnClickListener {
-
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             finish() // garantiza que la actividad actual se cierre correctamente
+        }
+
+        btnGoogle.setOnClickListener {
+
         }
     }
 
@@ -139,28 +143,22 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun getAllUsersRoom() : List<UserEntity>{
         val users = database.getUserDao().getAllUser()
-        /*if(users.isNotEmpty()){
-            users.forEach{
-                Log.d("dfragoso94","Usuario: ${it.name} con ID: ${it.id}")
-            }
-        }
-        else{
-            Log.d("dfragoso94","No hay datos cargados en la DB")
-        }*/
         return users
     }
 
-    /*private suspend fun saveUsers(){
-        val user1 = UserEntity(name = "Daniel", password = "123456")
-        //val user2 = UserEntity(name = "Ana", password = "12345678")
-        var response = database.getUserDao().getUserId(user1.name.trim())
-        if(response == null)
-        {
-            database.getUserDao().insertAll(user1)
-        }
-        else{
-            Log.d("dfragoso94","El dato ya existe en la DB")
-        }
-        //database.getUserDao().insertAll(user2)
-    }*/
+    private fun signInFirebase(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    Log.d(Helpers.TAG, "signInWithEmail:success | user:${user}")
+                    navigation("home")
+                }
+                else {
+                    Log.w(Helpers.TAG, "signInWithEmail:failure->${task.exception?.message}") //task.exception
+                    showMessage("signInWithEmail:failure->${task.exception?.message}")
+                }
+            }
+    }
+
 }

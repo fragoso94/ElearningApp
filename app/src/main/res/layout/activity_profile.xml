@@ -22,7 +22,7 @@
         app:srcCompat="@drawable/ic_baseline_account" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -48,7 +48,7 @@
         android:textColor="#B6B6B6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfile" />
 
     <EditText
         android:id="@+id/et_email_address_profile"
@@ -99,7 +99,7 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_baseline_photo_camera"
         app:backgroundTint="@color/orange_normal"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/textViewProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.653"
         app:layout_constraintStart_toStartOf="parent"
