@@ -13,6 +13,9 @@ interface UserDao {
     @Query("select * from user_table where name = :userName")
     suspend fun getUserId(userName: String): UserEntity
 
+    @Query("select * from user_table where email = :userEmail")
+    suspend fun getUserEmail(userEmail: String): UserEntity
+
     @Query("UPDATE user_table SET status = :userStatus WHERE name = :userName")
     suspend fun updateStatusUser(userName: String, userStatus: Boolean)
 

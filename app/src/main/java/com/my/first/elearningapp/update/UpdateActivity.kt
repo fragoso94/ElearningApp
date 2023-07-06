@@ -5,8 +5,10 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,8 +16,13 @@ import androidx.lifecycle.coroutineScope
 import androidx.room.Room
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.database.ElearningDatabase
+import com.my.first.elearningapp.database.entities.UserEntity
+import com.my.first.elearningapp.database.utilities.Helpers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -28,13 +35,16 @@ class UpdateActivity : AppCompatActivity() {
     private lateinit var etName: EditText
     private lateinit var etEmail: EditText
     private lateinit var etMobile: EditText
+    private lateinit var tvProfile: TextView
 
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-
+        auth = Firebase.auth //indicamos vamos a utilizar los método de autencación en este activity
         initUI()
+        getUserLogged()
         lifecycle.coroutineScope.launch(Dispatchers.IO) {
             initData2()
             lifecycle.coroutineScope.launch(Dispatchers.Main){
@@ -46,11 +56,15 @@ class UpdateActivity : AppCompatActivity() {
 
                     if (name.isNotEmpty() && email.isNotEmpty() && mobile.isNotEmpty()) {
                         lifecycle.coroutineScope.launch(Dispatchers.Main) {
-                            val user1 = database.getUserDao().getUserId(UserData.userEmail)
-                            user1.name = name
-                            user1.email = email
-                            user1.mobile = mobile
-                            database.getUserDao().update(user1)
+                            val userFirebase = auth.currentUser
+                            val user1 = userFirebase?.email?.let { it1 ->
+                                database.getUserDao().getUserEmail(it1)
+                            }
+                            user1?.name = name
+                            user1?.email = email
+                            user1?.mobile = mobile
+                            database.getUserDao().update(user1 as UserEntity)
+                            updateEmailFirebase(email)
                             Toast.makeText(applicationContext, "Data updated successfully", Toast.LENGTH_SHORT).show()
                         }
                     } else {
@@ -58,11 +72,9 @@ class UpdateActivity : AppCompatActivity() {
                     }
                 }
             }
-
             addPhotoButton.setOnClickListener{
                 startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
             }
-
         }
     }
 
@@ -78,7 +90,6 @@ class UpdateActivity : AppCompatActivity() {
         }
     }
 
-
     private fun initUI(){
         database = Room.databaseBuilder(
             applicationContext, ElearningDatabase::class.java, ElearningDatabase.DATABASE_NAME
@@ -91,15 +102,25 @@ class UpdateActivity : AppCompatActivity() {
         etMobile = findViewById(R.id.et_mobile_profile)
         addPhotoButton = findViewById(R.id.addPhotoFab)
         imageViewUser = findViewById(R.id.imageView_profile)
+        tvProfile = findViewById(R.id.textViewProfile)
     }
 
     private suspend fun initData2() {
         try{
             val SingleUser = UserData.userEmail.toString()
-            val user = database.getUserDao().getUserId(SingleUser.toString())
-            etName.setText(user.name)
-            etEmail.setText(user.email)
-            etMobile.setText(user.mobile)
+            if (SingleUser.isNotEmpty()){
+                val user = database.getUserDao().getUserId(SingleUser.toString())
+                etName.setText(user.name)
+                etEmail.setText(user.email)
+                etMobile.setText(user.mobile)
+            }
+            else{
+                val userFirebase = auth.currentUser
+                val user = userFirebase?.email?.let { database.getUserDao().getUserEmail(it) }
+                etName.setText(user?.name)
+                etEmail.setText(user?.email)
+                etMobile.setText(user?.mobile)
+            }
         }
         catch (e: Exception)
         {
@@ -114,6 +135,32 @@ class UpdateActivity : AppCompatActivity() {
 
         // Asegúrate de finalizar la actividad actual para que no se pueda volver atrás
         finish()
+    }
+
+    private fun getUserLogged(){
+        if (Helpers.isInternetAvailable(this)){
+            val user = auth.currentUser
+            if (user != null) {
+                // User is signed in
+                tvProfile.text = user?.email
+            } else {
+                // No user is signed in
+                tvProfile.text = "No user";
+            }
+        }
+        else{
+            tvProfile.text = "Anónimo";
+        }
+    }
+
+    private fun updateEmailFirebase(email: String){
+        val user = auth.currentUser
+        user!!.updateEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(Helpers.TAG, "User email address updated.")
+                }
+            }
     }
 }
 

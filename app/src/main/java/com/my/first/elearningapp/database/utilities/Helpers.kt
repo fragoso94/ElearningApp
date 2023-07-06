@@ -5,6 +5,10 @@ import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.view.View
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseResponse
 import okhttp3.OkHttpClient
@@ -21,6 +25,7 @@ class Helpers {
         const val COURSE_ITEM = "courseITEM"
         const val IS_VIEW_BUY = "courseTYPE"
         const val URL_BASE_API = "https://apicursosbedu.servicesnet.site/" //"http://192.168.1.164:9095/"
+        const val TAG = "dfragoso94"
         // Código para los permisos de la camará
         const val PERMISSION_CODE = 1000
         const val IMAGE_CAPTURE_CODE = 1001

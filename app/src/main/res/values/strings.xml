@@ -25,6 +25,7 @@
     <string name="title_button_update2">Update</string>
     <string name="title_profile_edit">Change profile information</string>
     <string name="title_profile_change_pass">Change password</string>
+    <string name="title_profile_logout">SingOut</string>
     <string name="title_profile">Edit Profile</string>
     <string name="input_createpass_newpass">Create new password</string>
     <string name="name_course">Curso</string>

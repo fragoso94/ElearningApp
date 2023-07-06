@@ -23,6 +23,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.my.first.elearningapp.MainActivity
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.database.utilities.Helpers
 import com.my.first.elearningapp.update.ChangepassActivity
@@ -34,8 +38,11 @@ class ProfileFragment: Fragment(R.layout.fragment_profile) {
 
     private lateinit var btnIrAActividad: ImageButton
     private lateinit var btnIrAActividad2: ImageButton
+    private lateinit var btnSignOut: ImageButton
     private lateinit var imageViewUser: ImageView
     private lateinit var addPhoto: FloatingActionButton
+
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +54,7 @@ class ProfileFragment: Fragment(R.layout.fragment_profile) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        auth = Firebase.auth //indicamos vamos a utilizar los método de autencación en este activity
         // Configura la animación de transición
         val enterTransitionAnim: Transition = TransitionInflater.from(requireContext())
             .inflateTransition(android.R.transition.fade)
@@ -70,6 +77,7 @@ class ProfileFragment: Fragment(R.layout.fragment_profile) {
         btnIrAActividad2 = view.findViewById(R.id.imageButton4)
         imageViewUser = view.findViewById(R.id.imageViewUser)
         addPhoto = view.findViewById(R.id.addPhotoFab)
+        btnSignOut = view.findViewById(R.id.imgBtnSingOut)
     }
 
     fun initListener(){
@@ -106,6 +114,12 @@ class ProfileFragment: Fragment(R.layout.fragment_profile) {
                     Helpers.PERMISSION_CODE
                 )
             }
+        }
+
+        btnSignOut.setOnClickListener {
+            auth.signOut()
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
