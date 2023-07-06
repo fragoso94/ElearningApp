@@ -4,15 +4,22 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.room.Room
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.my.first.elearningapp.MainActivity
 import com.my.first.elearningapp.R
 import com.my.first.elearningapp.database.ElearningDatabase
 import com.my.first.elearningapp.database.entities.UserEntity
+import com.my.first.elearningapp.database.utilities.Helpers
+import com.my.first.elearningapp.database.utilities.Utility
 import com.my.first.elearningapp.model.SimpleResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,11 +35,12 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var tvLogin: TextView
 
     private lateinit var database: ElearningDatabase
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-
+        auth = Firebase.auth //indicamos vamos a utilizar los método de autencación en este activity
         initUI()
         initListener()
     }
@@ -134,11 +142,27 @@ class SignUpActivity : AppCompatActivity() {
         if(response == null)
         {
             database.getUserDao().insertAll(data)
-            Log.d("dfragoso94","El usuario se creo correctamente.")
-            navigationHome()
+            createAccountFirebase(data.email, data.password)
         }
         else{
             Log.d("dfragoso94","El dato ya existe en la DB")
         }
     }
+
+    private fun createAccountFirebase(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email,password)
+            .addOnCompleteListener(this){ task ->
+                if (task.isSuccessful){
+                    val user = auth.currentUser
+                    Log.d(Helpers.TAG,"createAccount: success | User${user}")
+                    showMessage("createAccount: success | User${user}")
+                    navigationHome()
+                }
+                else{
+                    Log.d(Helpers.TAG,"createAccount: failed->${task.exception?.message}")
+                    showMessage("createAccount: failed->${task.exception?.message}")
+                }
+            }
+    }
+
 }

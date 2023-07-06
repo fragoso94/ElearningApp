@@ -14,6 +14,7 @@
     <color name="inactive">#8A8A8A</color>
     <color name="yellow">#FFB300</color>
     <color name="green">#15A812</color>
+    <color name="reed">#E80A55</color>
     <color name="blue">#6B97F8</color>
     <color name="triforce">#CC9900</color>
 </resources>
