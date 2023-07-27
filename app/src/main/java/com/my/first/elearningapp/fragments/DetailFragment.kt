@@ -42,7 +42,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail), CourseClickListener {
         val course: Course? = arguments?.getParcelable(Helpers.COURSE_ITEM)
         if(course != null) {
 
-            binding.courseImage.setImageResource(course.image)
+            //binding.courseImage.setImageResource(course.image)
             binding.tvCourse.text = course.name
             binding.tvPrice.text = "$" + String.format("%.2f", course.price)
             binding.tvDuration.text = String.format("%.2f", course.duration) + " horas"

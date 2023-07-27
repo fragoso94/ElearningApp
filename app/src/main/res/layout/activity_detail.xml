@@ -14,63 +14,79 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
-            <ImageView
-                android:id="@+id/courseImage"
-                android:layout_width="256dp"
-                android:layout_height="256dp"
-                android:layout_marginTop="40dp"
-                android:src="@drawable/python"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tvCourse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/name_course"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center_vertical">
+                <ImageView
+                    android:id="@+id/courseImage"
+                    android:layout_width="256dp"
+                    android:layout_height="256dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/python"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <RatingBar
-                android:id="@+id/rbCalification"
-                style="@style/Widget.AppCompat.RatingBar.Indicator"
-                android:theme="@style/RatingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"/>
+                <TextView
+                    android:id="@+id/tvCourse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name_course"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"/>
 
-            <TextView
-                android:id="@+id/tvDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tvDuration"
-                android:textSize="24sp"
-                android:layout_marginTop="20dp"/>
+                <RatingBar
+                    android:id="@+id/rbCalification"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
+                    android:theme="@style/RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"/>
 
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tv_price"
-                android:textSize="24sp"
-                android:layout_marginTop="20dp"/>
+                <TextView
+                    android:id="@+id/tvDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tvDuration"
+                    android:textSize="24sp"
+                    android:layout_marginTop="20dp"/>
 
-            <Button
-                android:id="@+id/buttonBuy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:backgroundTint="#CD8025"
-                android:drawableLeft="@drawable/baseline_shopping_cart_24"
-                android:text="@string/buttonBuy" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_price"
+                    android:textSize="24sp"
+                    android:layout_marginTop="20dp"/>
+
+                <Button
+                    android:id="@+id/buttonBuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:backgroundTint="#CD8025"
+                    android:drawableLeft="@drawable/baseline_shopping_cart_24"
+                    android:text="@string/buttonBuy" />
+                <Button
+                    android:id="@+id/buttonPlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:backgroundTint="#CD8025"
+                    android:visibility="gone"
+                    android:drawableLeft="@drawable/ic_baseline_play"
+                    android:text="@string/buttonPlay" />
+            </LinearLayout>
+
+        </ScrollView>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

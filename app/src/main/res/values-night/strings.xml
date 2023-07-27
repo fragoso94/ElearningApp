@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">ElearningApp</string>
+    <string name="title_login">Bienvenido</string>
+    <string name="title_signup">¡Comencemos!</string>
+    <string name="subtitle_login">Inicie sesión en su cuenta existente de e-learning</string>
+    <string name="subtitle_signup">Crea una cuenta de e-learning para obtener todas las características</string>
+    <string name="input_email_login">Nombre de usuario</string>
+    <string name="input_password_login">Contraseña</string>
+    <string name="input_name_signup">Nombre</string>
+    <string name="input_email_signup">Correo electrónico</string>
+    <string name="input_mobile_signup">Número de teléfono</string>
+    <string name="input_createpass_signup">Crear contraseña</string>
+    <string name="input_confirmpass_signup">Confirmar contraseña</string>
+    <string name="title_forgot_login">¿Olvidó su contraseña?</string>
+    <string name="title_button_login">Iniciar sesión</string>
+    <string name="title_button_signup">Registrate</string>
+    <string name="subtitle_button_login">O conéctese usando</string>
+    <string name="title_footer_signup">¿Ya tienes una cuenta?</string>
+    <string name="title_footer_login">¿No tienes una cuenta?</string>
+    <string name="title_footer_signup_login">Iniciar sesión</string>
+    <string name="title_footer_login_signup">Inicia sesión ahora</string>>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="input_confirmpass_newpass">Confirmar nueva contraseña</string>
+    <string name="title_button_update">Actualizar</string>
+    <string name="title_button_update2">Actualizar</string>
+    <string name="title_profile_edit">Cambiar la información del perfil</string>
+    <string name="title_profile_change_pass">Cambiar contraseña</string>
+    <string name="title_profile_logout">Cerrar sesión</string>
+    <string name="title_profile">Editar perfil</string>
+    <string name="input_createpass_newpass">Crear nueva contraseña</string>
+    <string name="name_course">Curso</string>
+    <string name="tvDuration">10</string>
+    <string name="tv_price">10</string>
+    <string name="buttonDesign">Diseño</string>
+    <string name="buttonProg">Programación</string>
+    <string name="buttonWeb">Desarrollo Web</string>
+    <string name="buttonAll">Ver todo</string>
+    <string name="text_fragment_courses">Categoría</string>
     <string name="buys">Mis cursos</string>
     <string name="buttonBuy">Comprar</string>
+    <string name="buttonPlay">Ver curso</string>
+    <string name="title_fragment_home">Inicio</string>
+    <string name="title_fragment_course">Mis cursos</string>
 </resources>

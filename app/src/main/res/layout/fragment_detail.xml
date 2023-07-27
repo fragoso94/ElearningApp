@@ -15,72 +15,92 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/courseImage"
-            android:layout_width="256dp"
-            android:layout_height="256dp"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/python"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvCourse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/name_course"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseImage" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center_vertical">
 
-        <RatingBar
-            android:id="@+id/rbCalification"
-            style="@style/Widget.AppCompat.RatingBar.Indicator"
-            android:theme="@style/RatingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
+                <ImageView
+                    android:id="@+id/courseImage"
+                    android:layout_width="256dp"
+                    android:layout_height="256dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/python"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/tvDuration"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rbCalification" />
+                <TextView
+                    android:id="@+id/tvCourse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/name_course"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/courseImage" />
 
-        <TextView
-            android:id="@+id/tvPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/tv_price"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDuration" />
+                <RatingBar
+                    android:id="@+id/rbCalification"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
+                    android:theme="@style/RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCourse" />
 
-        <Button
-            android:id="@+id/buttonBuy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:backgroundTint="#CD8025"
-            android:drawableLeft="@drawable/baseline_shopping_cart_24"
-            android:text="@string/buttonBuy"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/tvDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/tvDuration"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rbCalification" />
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/tv_price"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDuration" />
+
+                <Button
+                    android:id="@+id/buttonBuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
+                    android:backgroundTint="#CD8025"
+                    android:drawableLeft="@drawable/baseline_shopping_cart_24"
+                    android:text="@string/buttonBuy"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <VideoView
+                    android:id="@+id/videoView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
