@@ -30,7 +30,7 @@ class Helpers {
         const val PERMISSION_CODE = 1000
         const val IMAGE_CAPTURE_CODE = 1001
 
-        fun convertDataClass(context: Context, dataClassA: CourseResponse): Course {
+        /*fun convertDataClass(context: Context, dataClassA: CourseResponse): Course {
             val resources: Resources = context.resources
             val packageName: String = context.packageName
             val image = resources.getIdentifier(dataClassA.image, "drawable", packageName)
@@ -38,7 +38,7 @@ class Helpers {
             with(dataClassA){
                 return Course(id, image, category, name, duration, price, rating)
             }
-        }
+        }*/
 
         fun convertListDataClass(context: Context, dataClassA: List<CourseResponse>): List<Course> {
             val resources: Resources = context.resources
@@ -46,7 +46,7 @@ class Helpers {
 
             val courses: MutableList<Course> = mutableListOf()
             for (item in dataClassA){
-                val image = resources.getIdentifier(item.image, "drawable", packageName)
+                //val image = resources.getIdentifier(item.image, "drawable", packageName)
                 with(item){
                     val course = Course(id, image, category, name, duration, price, rating)
                     courses.add(course)

@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.my.first.elearningapp.databinding.CardviewCourseBinding
 import com.my.first.elearningapp.model.Course
 import com.my.first.elearningapp.model.CourseClickListener
+import com.squareup.picasso.Picasso
 
 class ViewHolder(private val cardviewCourseBinding: CardviewCourseBinding,
                  private val onClickListener:(Course) -> Unit //private val clickListener: CourseClickListener
@@ -11,7 +12,10 @@ class ViewHolder(private val cardviewCourseBinding: CardviewCourseBinding,
     : RecyclerView.ViewHolder(cardviewCourseBinding.root){
 
     fun bindCourse(course: Course){
-        cardviewCourseBinding.courseImage.setImageResource(course.image)
+        //cardviewCourseBinding.courseImage.setImageResource(course.image)
+        Picasso.get()
+            .load(course.image)
+            .into(cardviewCourseBinding.courseImage)
         cardviewCourseBinding.tvCourse.text = course.name
         cardviewCourseBinding.tvPrice.text = "$" + String.format("%.2f", course.price)
         cardviewCourseBinding.tvHours.text = " "
